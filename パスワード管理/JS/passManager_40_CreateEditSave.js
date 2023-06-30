@@ -23,7 +23,7 @@
         }
 
         //文字数チェック（4-16）
-        if (pass.length <= 4 || pass.length >= 16) {
+        if (pass.length < 4 || pass.length > 16) {
             event.error = "パスワードは「4文字以上16字以内」で入力してください";
             return event;
         }
