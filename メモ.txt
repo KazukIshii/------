@@ -1,0 +1,21 @@
+【カスタマイズファイル反映画面】
+https://kishii.cybozu.com/k/admin/app/customize?app=995
+
+
+【対応課題】
+・ログイン時の背景について
+→body下の要素のsweetalert部分以外のところをdivで囲いdisplay: noneを行う
+→別途背景色や背景画像を差し込みたい場合は、sweetalert部分とは別にdivを指定しそこに設定を行う
+→ログイン中断時はそのまま遷移、成功時は上記設定を解除、ログイン中の場合は上記設定は行わない
+
+・sesseionStrageに保存する情報について
+→現状中身が丸見えなので暗号化する
+→暗号化と復号の関数作成の必要あり（crypto.js?）
+
+・人事部コメントについて
+→人事部コメントは承認するにあたっての修正点等を記載する想定なので、自レコードと人事部以外は閲覧不可
+→ログイン者で表示の制御を行う
+
+・一覧から（すべて）を削除
+参考：
+https://toyokumo-blog.kintoneapp.com/kintone_index_permission/?_gl=1*1ffd4i0*_ga*Nzk0NzkzODU1LjE2ODEzODAzOTE.*_ga_T5K95WXL54*MTY4NDE0NzcxNC40LjEuMTY4NDE1MDAzMC42MC4wLjA
