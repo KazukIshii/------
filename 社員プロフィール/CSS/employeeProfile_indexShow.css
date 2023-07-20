@@ -27,12 +27,14 @@
     position: absolute;
     z-index: 1;
     padding: initial;
+    margin-left: 1px;
     width: fit-content;
     list-style: none;
     cursor: pointer;
-    border: 1px solid rgb(157 157 157);
+    border: 2px solid rgb(157 157 157);
     background-color: white;
     border-radius: 5px;
+    font-weight: bold;
 }
 
 /* ログイン中メニュー内リスト選択肢 */
@@ -49,4 +51,13 @@
 /* ログアウト */
 #logout {
     color: red;
+    border-top: 2px solid rgb(157 157 157);
+}
+
+/* 自身のレコード時の詳細画面遷移アイコン */
+.myself-index-icon {
+    display: inline-block;
+    margin-top: 6px;
+    width: 21px;
+    height: 19px;
 }
