@@ -1,0 +1,24 @@
+/*========================
+　ログイン情報入力モーダル
+========================*/
+
+/* 入力欄の配置 */
+.input-login-info {
+    display: inline-block;
+}
+
+/* 入力欄のスタイル */
+.input-box {
+    margin: 15px 0px 3px 0px;
+    padding-left: 3%;
+    width: 70%;
+    height: 2em;
+    border-radius: 4px;
+    box-shadow: 1px 2px 2px #696969;
+    font-size: 130%;
+}
+
+/* ログインボタンの位置変更 */
+.login-btn-right {
+    margin-left: 22em;
+}

@@ -12,6 +12,8 @@
 
     /**@param {*} 共通config*/
     const config = window.employeeProfile.getEnvironment();
+    //設定が取得できなかった場合は以降の処理中断
+    if (!config) return;
 
     //===== 画面表示時（一覧） =====
     kintone.events.on(["app.record.index.show"], async function (event) {
@@ -227,14 +229,15 @@
             };
         }
 
-        //一覧内自レコードの詳細アイコン変更
-        if (event.viewId === config.viewId.profileList) {
+        //一覧内自レコードの詳細アイコン変更・閲覧対象外レコード非表示処理（人事部除く）
+        if (event.viewId === config.viewId.profileList && loginObj.id !== config.others.HRId) {
+            //詳細アイコン変更
             const employeeElm = kintone.app.getFieldElements("社員番号");
             //社員番号が一致する行（レコード）を取得
             let targetRow = null;
             for (const row of Array.from(employeeElm)) {
                 if (row.children[0].children[0].innerText === loginObj.id) {
-                    targetRow = row.parentElement;
+                    targetRow = row.parentElement; //ここに恣意的に目印になるようなIDもしくはclassを付与→閲覧対象外判断の際に利用
                 }
             }
             //一致行が存在するかの確認
@@ -246,6 +249,18 @@
                 targetRow.children[0].children[0].children[0].style.backgroundSize = "20px"; //アイコンのサイズ
                 targetRow.children[0].children[0].children[0].classList.add("myself-index-icon"); //その他スタイルはCSSで当てる
                 targetRow.children[0].children[0].style.padding = "9px 10px"; //aタグの余白変更
+            }
+
+            //閲覧対象外レコード非表示
+            const statusElm = kintone.app.getFieldElements("ステータス");
+            //ステータスが承認済以外の行は非表示
+            for (const row of Array.from(statusElm)) {
+                if (row.children[0].children[0].innerText !== "承認済") {
+                    //自分のレコードは除外　//ここ条件変更必要
+                    if (row.children[0].children[0].innerText === loginObj.id) {
+                        break;
+                    }
+                }
             }
         }
 
@@ -293,6 +308,7 @@
      * @returns 取得レコード全量
      */
     async function recursiveGetProcess(appId, recordId = 0, records = []) {
+        //エラーハンドリングは呼出元で行う（階層が深くなるとおかしくなるため）
         try {
             //指定のレコードIDより大きいレコードIDのレコードを取得
             const resp = await kintone.api(kintone.api.url("/k/v1/records", true), "GET", {

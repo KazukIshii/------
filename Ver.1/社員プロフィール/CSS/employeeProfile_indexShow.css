@@ -1,0 +1,63 @@
+/*===============
+　一覧画面表示時
+================*/
+
+/* ログイン中に表示される情報 */
+.login-info {
+    display: inline-block;
+}
+
+/* ログイン中に表示されるログインユーザー名 */
+.login-user {
+    display: inline-block;
+    /* vertical-align: bottom; */
+}
+
+/* ログイン中メニュー*/
+.logging-in-menu {
+    display: inline-block;
+    width: 2em;
+    cursor: pointer;
+    /* vertical-align: super; */
+}
+
+/* ログイン中メニュー内リスト */
+.logging-in-menu-list {
+    display: inline-block;
+    position: absolute;
+    z-index: 1;
+    padding: initial;
+    margin-left: 1px;
+    width: fit-content;
+    list-style: none;
+    cursor: pointer;
+    border: 2px solid rgb(157 157 157);
+    background-color: white;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* ログイン中メニュー内リスト選択肢 */
+.logging-in-menu-list-item {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+/* ログイン中メニュー内リスト選択肢 ホバー時*/
+.logging-in-menu-list-item:hover {
+    background-color: #d8f3f9;
+}
+
+/* ログアウト */
+#logout {
+    color: red;
+    border-top: 2px solid rgb(157 157 157);
+}
+
+/* 自身のレコード時の詳細画面遷移アイコン */
+.myself-index-icon {
+    display: inline-block;
+    margin-top: 6px;
+    width: 21px;
+    height: 19px;
+}
