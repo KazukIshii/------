@@ -19,3 +19,7 @@ https://kishii.cybozu.com/k/admin/app/customize?app=995
 ・一覧から（すべて）を削除
 参考：
 https://toyokumo-blog.kintoneapp.com/kintone_index_permission/?_gl=1*1ffd4i0*_ga*Nzk0NzkzODU1LjE2ODEzODAzOTE.*_ga_T5K95WXL54*MTY4NDE0NzcxNC40LjEuMTY4NDE1MDAzMC42MC4wLjA
+
+[2023-09-13]
+・ボタンクリック時の動作時のtry catch
+・郵便番号検索

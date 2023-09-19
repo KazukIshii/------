@@ -10,10 +10,10 @@
   /** 関数 */
   const FUNCTION = window.training_No9.Function;
 
-  kintone.events.on(["app.record.detail.show"], (event) => {
+  kintone.events.on(["app.record.create.show", "app.record.edit.show"], async (event) => {
     try {
-      // kintone標準ボタンの非表示（クラス）
-      COMMON_FUNCTION.removeWindowElement(COMMON.removeElm_detail);
+      // 郵便番号検索ボタンの生成
+      await FUNCTION.setting_PostcodeButton(COMMON.button.searchForPostcode);
     } catch (e) {
       // エラー時
       console.log(e);
