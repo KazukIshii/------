@@ -181,7 +181,7 @@
           /*=== ログイン時の画面遷移分岐 ===*/
           const plofileResp = await kintone.api(kintone.api.url("/k/v1/records", true), "GET", {
             app: kintone.app.getId(),
-            query: `社員番号 = "${loginInfo.id}"`,
+            query: `${COMMON.appField.employeePlofile.employeeNum.code} = "${loginInfo.id}"`,
           });
 
           /*=== プロフィール作成チェック ===*/
@@ -359,7 +359,7 @@
               // 自身の社員番号のレコードを取得
               const resp = await kintone.api(kintone.api.url("/k/v1/records", true), "GET", {
                 app: kintone.app.getId(),
-                query: `社員番号 = "${loginInfo.id}"`,
+                query: `${COMMON.appField.employeePlofile.employeeNum.code} = "${loginInfo.id}"`,
               });
               // 自身の社員番号レコードへの画面遷移
               location.href = COMMON_FUNCTION.createURL(
@@ -472,9 +472,14 @@
             try {
               const recordObj = kintone.app.record.get();
               // 郵便番号検索処理
-              const address = await COMMON_FUNCTION.searchPostcode(recordObj.record.郵便番号.value);
+              const address = await COMMON_FUNCTION.searchPostcode(
+                recordObj.record[COMMON.appField.employeePlofile.postcode.code].value
+              );
+              /*=== 住所に値があるかを確認 ===*/
+              if (address) {
+                recordObj.record[COMMON.appField.employeePlofile.address.code].value = address;
+              }
               // 値のセット
-              recordObj.record.住所.value = address;
               kintone.app.record.set(recordObj);
             } catch (e) {
               console.log(e);
