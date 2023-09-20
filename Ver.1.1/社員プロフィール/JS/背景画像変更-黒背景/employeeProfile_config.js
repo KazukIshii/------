@@ -74,12 +74,12 @@
     const myselfId = kintone.app.getId();
     const configAry = [devConfig, srConfig];
 
-    //環境に適した設定情報の取得
+    /** 環境に適した設定情報の取得 */
     let currentConfig = null;
     endLoop: for (const config of configAry) {
       const appIdKeys = Object.keys(config.appId);
       for (const key of appIdKeys) {
-        //自アプリのIDが存在する設定情報を取得
+        /*=== 自アプリのIDが存在する設定情報を取得 ===*/
         if (config.appId[key] === myselfId) {
           currentConfig = config;
           break endLoop;
@@ -87,10 +87,12 @@
       }
     }
 
-    //設定情報の取得確認
+    /*=== 設定情報の取得確認 ===*/
     if (currentConfig) {
+      /* 取得確認時 */
       return currentConfig;
     } else {
+      /* 取得失敗時 */
       window.alert("設定の取得に失敗しました。configファイルもしくは環境の確認を行ってください。");
       return false;
     }

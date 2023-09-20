@@ -32,6 +32,7 @@
         // 再帰処理（アプリID, 最後のレコードID, 現段階での取得レコード情報全量）
         return await recursiveGetProcess(appId, lastRecordId, records.concat(getRecords));
       } else {
+        /* 500件未満の場合 */
         // レコード情報を返し処理終了
         return records.concat(getRecords);
       }
@@ -46,7 +47,7 @@
      * }} removeElms 削除対象の要素情報 [必須]
      */
     removeWindowElement: (removeElms) => {
-      //各要素タイプ数分ループ処理
+      // 各要素タイプ数分ループ処理
       for (const removeElm of Object.values(removeElms)) {
         // 要素名タイプ
         const type = removeElm.type;
@@ -55,26 +56,26 @@
 
         // 要素数だけ処理実行
         for (const elmName of elmNames) {
-          // 要素名のタイプに応じた非表示処理実行
           switch (type) {
-            // IDの場合
+            /** IDの場合 */
             case "ID":
               document.getElementById(elmName).remove();
               break;
-            // クラスの場合
+            /** クラスの場合 */
             case "CLASS":
               const classElms = Array.from(document.getElementsByClassName(elmName));
               for (const elm of classElms) {
                 elm.remove();
               }
               break;
-            // ネームの場合
+            /** ネームの場合 */
             case "NAME":
               const nameElms = Array.from(document.getElementsByName(elmName));
               for (const elm of nameElms) {
                 elm.remove();
               }
               break;
+            /** いずれにも一致しなかった場合 */
             default:
               throw new Error(
                 `要素名タイプの指定に誤りがあります。指定値の確認を行ってください。\n現在の指定値「${type}」`
@@ -106,11 +107,11 @@
 
       /*=== URLタイプによる分岐 ===*/
       switch (type) {
-        // ポータル
+        /** ポータル */
         case "PORTAL":
           URL = `${baseURL}/#/portal`;
           break;
-        // スペースポータル
+        /** スペースポータル */
         case "SPACE_PORTAL":
           // スペースIDの入力チェック
           if (!spaceId) throw new Error("スペースIDの指定がありません。");
@@ -126,25 +127,26 @@
             URL = `${baseURL}/#/space/${spaceId}/thread/${threadId}`;
           }
           break;
-        // レコード作成画面
+        /** レコード作成画面 */
         case "CREATE_RECORD":
           // アプリIDの入力チェック
           if (!appId) throw new Error("アプリIDの指定がありません。");
           URL = `${baseURL}/${appId}/edit`;
           break;
-        // レコード詳細画面
+        /** レコード詳細画面 */
         case "DETAIL_RECORD":
           // アプリID・レコードIDの入力チェック
           if (!appId || !recordId)
             throw new Error("アプリID・レコードIDの一方もしくは両方の指定がありません。");
           URL = `${baseURL}/${appId}/show#record=${recordId}`;
           break;
-        // 一覧画面
+        /** 一覧画面 */
         case "VIEW":
           // アプリIDの入力チェック
           if (!viewId) throw new Error("ビューIDの指定がありません。");
           URL = `${baseURL}/${appId}/?view=${viewId}`;
           break;
+        /** いずれにも一致しなかった場合 */
         default:
           throw new Error(
             `URLタイプの指定に誤りがあります。指定値の確認を行ってください。\n現在の指定値「${type}」`

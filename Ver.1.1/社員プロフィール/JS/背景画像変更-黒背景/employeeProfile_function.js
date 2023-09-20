@@ -49,7 +49,6 @@
           sessionStorage.setItem(COMMON.sessionKey.login, JSON.stringify(loginInfo));
         } else {
           /* 人事部ユーザー以外の場合 */
-          /*=== ログイン処理 ===*/
           const result = await Swal.fire({
             // ログイン認証モーダルの生成
             title: COMMON.loginModal.title,
@@ -75,7 +74,6 @@
                 .classList.add(COMMON.loginModal.class.loginButtonPositon);
             },
 
-            /*=== パスワード認証 ===*/
             preConfirm: async () => {
               // 入力社員番号
               const inputId = document.getElementById(COMMON.loginModal.id.employeeNum).value;
@@ -84,15 +82,15 @@
 
               // パスワード管理のレコード全量（社員情報）を取得
               let records = null;
-              /*=== ログイン認証失敗時はsesssionから社員情報を取得（リクエスト数の抑制） ===*/
+              /*=== 再ログイン時はsesssionから社員情報を取得（リクエスト数の抑制） ===*/
               if (sessionStorage.getItem(COMMON.sessionKey.employeeInfo)) {
-                /* ログイン認証失敗時 */
+                /* 再ログイン時 */
                 records = JSON.parse(sessionStorage.getItem(COMMON.sessionKey.employeeInfo));
               } else {
                 /* 初回ログイン認証時 */
                 records = await COMMON_FUNCTION.recursiveGetProcess(CONFIG.appId.passManager);
 
-                // パスワード管理にレコードが存在しない場合、処理終了
+                /*=== パスワード管理にレコードが存在しない場合、処理終了 ===*/
                 if (!records)
                   throw new Error(
                     "パスワード管理アプリに社員情報が存在しません。\nパスワード管理アプリに社員情報を追加して下さい。"
@@ -118,14 +116,14 @@
                 };
               }
 
-              // 社員番号の存在チェック・パスワードチェック
+              /*=== 社員番号の存在チェック・パスワードチェック ===*/
               if (!employeeInfo[inputId] || employeeInfo[inputId].pass !== inputPass) {
                 return Swal.showValidationMessage(
                   "「社員番号」もしくは「パスワード」に誤りがあります。"
                 );
               }
 
-              // 認証成功時
+              /* 認証成功時 */
               sessionStorage.removeItem(COMMON.sessionKey.employeeInfo);
               // ログイン情報の生成
               const loginInfo = {
@@ -136,7 +134,7 @@
             },
           });
 
-          // ログイン中断時・エラー発生時にポータル（スペース）へ遷移させる
+          /*=== ログイン中断時・エラー発生時にポータル（スペース）へ遷移させる ===*/
           if (result.dismiss === "close" || !result.value) {
             sessionStorage.removeItem(COMMON.sessionKey.employeeInfo);
 
@@ -240,7 +238,7 @@
       const loggingInMenu = document.getElementsByClassName(
         COMMON.afterLoginScreen.class.loggingInMenu
       )[0];
-      // ログイン中メニューのクリック時動作
+      // ログイン中メニューのクリック時処理
       loggingInMenu.onclick = () => {
         /*=== メニューリストの表示確認 ===*/
         const loggingInMenuList = document.getElementsByClassName(
@@ -269,9 +267,9 @@
             .getElementsByClassName(COMMON.afterLoginScreen.class.loggingInMenu)[0]
             .after(addLoggingInMenuList);
 
-          // ログアウト処理
+          // ログアウト項目クリック時処理
           document.getElementById(COMMON.afterLoginScreen.id.logout).onclick = async () => {
-            //画面の遷移
+            // モーダルの表示
             const movePortal = await Swal.fire({
               title: COMMON.logoutModal.title,
               allowOutsideClick: false,
@@ -328,7 +326,7 @@
               .getElementsByClassName(COMMON.afterLoginScreen.class.loggingInMenuList)[0]
               .insertBefore(addItem, document.getElementById(COMMON.afterLoginScreen.id.logout));
 
-            // 承認待ち一覧への遷移処理
+            // 承認待ち一覧項目クリック時処理
             document.getElementById(COMMON.afterLoginScreen.id.approvalPending).onclick = () => {
               // 承認待ち一覧への画面遷移
               location.href = COMMON_FUNCTION.createURL(
@@ -354,7 +352,7 @@
               .getElementsByClassName(COMMON.afterLoginScreen.class.loggingInMenuList)[0]
               .insertBefore(addItem, document.getElementById(COMMON.afterLoginScreen.id.logout));
 
-            // マイプロフィールへの遷移処理
+            // マイプロフィール項目クリック時処理
             document.getElementById(COMMON.afterLoginScreen.id.myProfile).onclick = async () => {
               // 自身の社員番号のレコードを取得
               const resp = await kintone.api(kintone.api.url("/k/v1/records", true), "GET", {
@@ -379,7 +377,7 @@
 
       // ログイン中メニューリスト外をクリックした時の処理
       document.onclick = (e) => {
-        // クリックした要素がログイン中メニューだった場合は処理終了
+        /*=== クリックした要素がログイン中メニューだった場合は処理終了 ===*/
         if (e.target.className === COMMON.afterLoginScreen.class.loggingInMenu) return;
 
         /*=== クリックした要素の祖先要素内にログイン中メニューリストもしくはsweetAlert2の要素があるかを確認 ===*/
@@ -426,12 +424,11 @@
             break;
           }
         }
-
         /*=== 一致行の存在確認 ===*/
         if (targetRow) {
           /* 存在する場合 */
           const icon = targetRow.children[0].children[0].children[0];
-          //詳細アイコンの変更
+          // 詳細アイコンの変更
           icon.style.background = `url(${COMMON.image.star})`; // アイコンの変更
           icon.style.backgroundRepeat = "no-repeat"; // アイコンの繰り返し設定
           icon.style.backgroundSize = "20px"; // アイコンのサイズ
@@ -439,6 +436,7 @@
           targetRow.children[0].children[0].style.padding = "9px 10px"; // aタグの余白変更
         }
 
+        // 各レコードのステータス確認
         const statusElm = kintone.app.getFieldElements(COMMON.appField.general.status.code);
         for (const row of Array.from(statusElm)) {
           /*=== ステータスが承認済か確認 ===*/
@@ -467,7 +465,7 @@
       const intervalId = setInterval(() => {
         /*=== ボタンの生成確認 ===*/
         if (document.getElementById(buttonInfo.id)) {
-          // 郵便番号検索機能の付与
+          // 郵便番号検索ボタンクリック時処理
           document.getElementById(buttonInfo.id).addEventListener("click", async () => {
             try {
               const recordObj = kintone.app.record.get();
@@ -475,8 +473,10 @@
               const address = await COMMON_FUNCTION.searchPostcode(
                 recordObj.record[COMMON.appField.employeePlofile.postcode.code].value
               );
-              /*=== 住所に値があるかを確認 ===*/
+              /*=== 住所の値が空ではないかを確認 ===*/
               if (address) {
+                /* 空ではない場合 */
+                // 住所フィールドの値を更新
                 recordObj.record[COMMON.appField.employeePlofile.address.code].value = address;
               }
               // 値のセット
