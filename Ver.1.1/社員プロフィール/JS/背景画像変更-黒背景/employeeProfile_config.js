@@ -60,6 +60,12 @@
       approvalPending: 8324675,
     },
 
+    /** スぺースのID */
+    spaceId: 91,
+
+    /** スレッドのID */
+    threadId: 99,
+
     /** 組織コード */
     orgCode: {
       // 人事管理部
